@@ -22,22 +22,26 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Deploy
 
-The app is a standard Next.js server deployment. Vercel is the simplest path.
-
 GitHub profile used by the site: [dashuaiw046-alt](https://github.com/dashuaiw046-alt).
 
-1. Create a repository under that account, then push this folder.
-2. Import the project in [Vercel](https://vercel.com/new). Root directory is this folder (`southsail_blog`).
-3. After the first deploy, copy the production URL.
-4. In Vercel → Project → Settings → Environment Variables, set:
+### Netlify
+
+1. Open [app.netlify.com/start](https://app.netlify.com/start).
+2. Import `dashuaiw046-alt/southsail_blog` from GitHub.
+3. Keep the detected Next.js settings. Build command is `npm run build`.
+4. Deploy.
+5. After the first deploy, copy the production URL, then set environment variables:
 
 ```txt
-NEXT_PUBLIC_SITE_URL=https://your-project.vercel.app
+NEXT_PUBLIC_SITE_URL=https://your-site.netlify.app
 NEXT_PUBLIC_GITHUB_URL=https://github.com/dashuaiw046-alt
 ```
 
-5. Redeploy so `sitemap.xml`, `robots.txt`, and Open Graph URLs use the public origin.
-6. Custom domain (optional): Vercel → Project → Settings → Domains, then update `NEXT_PUBLIC_SITE_URL` to that domain and redeploy.
+6. Trigger a new deploy so `sitemap.xml`, `robots.txt`, and Open Graph use the public origin.
+
+### Vercel
+
+Same repository also works on Vercel if that account becomes available later. Set the same two environment variables there.
 
 ## Add an article
 

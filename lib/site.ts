@@ -16,6 +16,12 @@ function resolveSiteUrl() {
   const vercelProduction = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
   if (vercelProduction) return withHttps(vercelProduction);
 
+  if (process.env.NETLIFY) {
+    const netlifyUrl =
+      process.env.URL?.trim() || process.env.DEPLOY_PRIME_URL?.trim();
+    if (netlifyUrl) return withHttps(netlifyUrl);
+  }
+
   return "http://localhost:3000";
 }
 
