@@ -57,17 +57,20 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           <ThemeSwitcher />
         </div>
 
-        <button
-          type="button"
-          className="rounded-full border px-3 py-2 text-sm md:hidden"
-          style={{ borderColor: "var(--border)", color: "var(--muted)" }}
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label="Toggle navigation"
-        >
-          {open ? "Close" : "Menu"}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeSwitcher compact={false} />
+          <button
+            type="button"
+            className="rounded-full border px-3 py-2 text-sm"
+            style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label="Toggle navigation"
+          >
+            {open ? "Close" : "Menu"}
+          </button>
+        </div>
       </nav>
 
       {open ? (
@@ -94,7 +97,18 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               </Link>
             );
           })}
-          <ThemeSwitcher />
+          <Link
+            href="/settings"
+            onClick={() => setOpen(false)}
+            className="block text-sm"
+            style={{
+              color: pathname.startsWith("/settings")
+                ? "var(--foreground)"
+                : "var(--muted)",
+            }}
+          >
+            Settings
+          </Link>
         </div>
       ) : null}
     </header>

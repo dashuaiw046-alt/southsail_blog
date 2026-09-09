@@ -17,19 +17,19 @@ export default function Home() {
   return (
     <PageShell transparentNav>
       <main>
-        <section className="relative flex min-h-screen items-center overflow-hidden">
+        <section className="relative flex min-h-[100svh] items-end overflow-hidden md:items-center">
           <CharacterBackground />
           <div
-            className="pointer-events-none absolute left-[18%] top-[42%] z-0 h-[320px] w-[320px] -translate-y-1/2 rounded-full blur-3xl"
+            className="pointer-events-none absolute left-[8%] top-[58%] z-0 h-[180px] w-[180px] -translate-y-1/2 rounded-full blur-3xl md:left-[18%] md:top-[42%] md:h-[320px] md:w-[320px]"
             style={{ background: "color-mix(in srgb, var(--accent) 28%, transparent)" }}
           />
-          <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-32 lg:px-8">
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-28 md:py-32 lg:px-8">
             <HeroContent>
             <div className="max-w-3xl">
               <p className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-[var(--primary)]">
                 Cybersecurity · CTF · Coding
               </p>
-              <h1 className="text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl">
+              <h1 className="text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl">
                 Hi, I&apos;m
                 <span className="block text-[var(--muted)]">southsail.</span>
               </h1>

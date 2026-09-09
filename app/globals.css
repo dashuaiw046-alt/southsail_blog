@@ -148,4 +148,11 @@ body {
   .article-body {
     font-size: 1rem;
   }
+
+  body {
+    background:
+      radial-gradient(ellipse 90% 42% at 80% 0%, var(--glow), transparent 58%),
+      radial-gradient(ellipse 70% 36% at 10% 100%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 62%),
+      var(--background);
+  }
 }
