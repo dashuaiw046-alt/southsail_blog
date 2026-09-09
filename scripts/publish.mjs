@@ -9,13 +9,16 @@ function usage() {
   console.log(`Publish a Markdown note to GitHub. Netlify updates the blog after push.
 
 Usage:
+  npm run note
   npm run note -- <file.md> [...]
   npm run note -- --ctf <file.md>
   npm run note -- --article <file.md>
   npm run note -- --push-content
 
+With no files, a Windows file picker opens, then a section picker.
+
 Options:
-  --article          Put files in content/articles (default)
+  --article          Put files in content/articles
   --ctf              Put files in content/ctf
   --slug <name>      Override the destination filename (single file only)
   --title <text>     Override title when frontmatter is missing
@@ -29,6 +32,7 @@ Options:
 function parseArgs(argv) {
   const options = {
     type: "articles",
+    typeExplicit: false,
     files: [],
     slug: "",
     title: "",
@@ -46,10 +50,12 @@ function parseArgs(argv) {
     }
     if (arg === "--article") {
       options.type = "articles";
+      options.typeExplicit = true;
       continue;
     }
     if (arg === "--ctf") {
       options.type = "ctf";
+      options.typeExplicit = true;
       continue;
     }
     if (arg === "--force") {
@@ -101,6 +107,55 @@ function today() {
 
 function quoteYaml(value) {
   return JSON.stringify(String(value));
+}
+
+function runPicker(action) {
+  const script = path.join(root, "scripts", "pick-note.ps1");
+  const result = spawnSync(
+    "powershell.exe",
+    [
+      "-NoProfile",
+      "-STA",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      script,
+      "-Action",
+      action,
+    ],
+    { encoding: "utf8" },
+  );
+
+  if (result.status === 2) return null;
+  if (result.status !== 0) {
+    const detail = (result.stderr || result.stdout || "").trim();
+    throw new Error(`Picker failed${detail ? `\n${detail}` : ""}`);
+  }
+
+  const raw = (result.stdout || "").trim();
+  if (!raw) return null;
+  return JSON.parse(raw);
+}
+
+function pickFiles() {
+  console.log("Opening file picker...");
+  const picked = runPicker("files");
+  if (!picked) return [];
+  const files = Array.isArray(picked.files)
+    ? picked.files
+    : picked.files
+      ? [picked.files]
+      : [];
+  return files.filter(Boolean);
+}
+
+function pickModule() {
+  console.log("Choose Articles or CTF...");
+  const picked = runPicker("module");
+  if (!picked || (picked.type !== "articles" && picked.type !== "ctf")) {
+    return null;
+  }
+  return picked.type;
 }
 
 function git(args, extra = {}) {
@@ -283,8 +338,31 @@ function main() {
   }
 
   if (!options.files.length) {
-    usage();
-    process.exit(1);
+    options.files = pickFiles();
+    if (!options.files.length) {
+      console.log("Cancelled.");
+      return;
+    }
+  }
+
+  if (!options.typeExplicit) {
+    const folders = new Set(
+      options.files.map((file) => {
+        const absolute = path.resolve(process.cwd(), file);
+        if (!alreadyInContent(absolute)) return "";
+        return path.relative(path.join(root, "content"), absolute).split(path.sep)[0];
+      }),
+    );
+    if (folders.size === 1 && (folders.has("articles") || folders.has("ctf"))) {
+      options.type = [...folders][0];
+    } else {
+      const picked = pickModule();
+      if (!picked) {
+        console.log("Cancelled.");
+        return;
+      }
+      options.type = picked;
+    }
   }
 
   if (options.slug && options.files.length > 1) {

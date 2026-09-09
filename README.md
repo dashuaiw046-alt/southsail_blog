@@ -48,13 +48,21 @@ Same repository also works on Vercel if that account becomes available later. Se
 Put a finished Markdown file on GitHub. Netlify updates the live blog after the push.
 
 ```bash
+npm run note
+```
+
+A file picker opens first. After you choose Markdown files, pick **Articles** or **CTF**. The script then copies, commits, and pushes.
+
+You can still pass a path directly:
+
+```bash
 npm run note -- D:\notes\sql-injection.md
 npm run note -- --ctf D:\notes\rsa-writeup.md
 ```
 
 The script copies the file into `content/`, fills missing frontmatter, commits, and pushes.
 
-- `--article` default, writes to `content/articles/`
+- `--article` writes to `content/articles/`
 - `--ctf` writes to `content/ctf/`
 - `--force` overwrite an existing slug
 - `--no-push` commit only
