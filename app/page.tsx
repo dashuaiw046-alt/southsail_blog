@@ -3,6 +3,7 @@ import Link from "next/link";
 import ArticleCard from "@/components/article/ArticleCard";
 import CtfCard from "@/components/ctf/CtfCard";
 import HeroContent from "@/components/layout/HeroContent";
+import MobileHero from "@/components/layout/MobileHero";
 import PageShell from "@/components/layout/PageShell";
 import ProjectCard from "@/components/project/ProjectCard";
 import CharacterBackground from "@/components/theme/CharacterBackground";
@@ -17,29 +18,29 @@ export default function Home() {
   return (
     <PageShell transparentNav>
       <main>
-        <section className="relative md:flex md:min-h-screen md:items-center md:overflow-hidden">
-          <div className="relative h-[46svh] min-h-[280px] overflow-hidden md:absolute md:inset-0 md:h-auto md:min-h-0">
-            <CharacterBackground />
-          </div>
+        <MobileHero />
+
+        <section className="relative hidden min-h-screen items-center overflow-hidden md:flex">
+          <CharacterBackground />
           <div
-            className="pointer-events-none absolute left-[12%] top-[62%] z-0 hidden h-[320px] w-[320px] -translate-y-1/2 rounded-full blur-3xl md:block md:left-[18%] md:top-[42%]"
+            className="pointer-events-none absolute left-[18%] top-[42%] z-0 h-[320px] w-[320px] -translate-y-1/2 rounded-full blur-3xl"
             style={{ background: "color-mix(in srgb, var(--accent) 28%, transparent)" }}
           />
-          <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-12 pt-7 md:px-6 md:py-32 lg:px-8">
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-32 lg:px-8">
             <HeroContent>
             <div className="max-w-3xl">
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.22em] text-[var(--primary)] sm:mb-6 sm:text-sm sm:tracking-[0.3em]">
+              <p className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-[var(--primary)]">
                 Cybersecurity · CTF · Coding
               </p>
-              <h1 className="text-[2.6rem] font-bold leading-[1.05] tracking-tight sm:text-7xl lg:text-8xl">
+              <h1 className="text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl">
                 Hi, I&apos;m
                 <span className="block text-[var(--muted)]">southsail.</span>
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--muted)] sm:mt-8 sm:text-lg sm:leading-8">
+              <p className="mt-8 max-w-2xl text-lg leading-8 text-[var(--muted)]">
                 A personal space for cybersecurity, CTF writeups, programming
                 projects, and everything I&apos;m learning along the way.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
+              <div className="mt-10 flex flex-wrap gap-4">
                 <Link
                   href="/articles"
                   className="rounded-full px-6 py-3 text-sm font-medium transition-transform hover:scale-105"
