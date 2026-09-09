@@ -53,6 +53,8 @@ npm run note
 
 A file picker opens first. After you choose Markdown files, pick **Articles** or **CTF**. The script then copies, commits, and pushes.
 
+Desktop shortcut (Windows): double-click `scripts/publish-note.cmd`, or the “southsail 发布笔记” shortcut on the Desktop.
+
 You can still pass a path directly:
 
 ```bash
