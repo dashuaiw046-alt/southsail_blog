@@ -29,6 +29,7 @@ export default function CharacterBackground({
     right = "-4%",
     top = "0%",
     mask = "edge",
+    thumbPosition = "center 18%",
   } = theme.character;
 
   const ambient = variant === "ambient";
@@ -40,22 +41,12 @@ export default function CharacterBackground({
     : ambient
       ? Math.min(opacity * 0.34, 0.32)
       : opacity;
-  const mobileOpacity = isLight
-    ? ambient
-      ? 0.14
-      : 0.42
-    : ambient
-      ? 0.22
-      : 0.62;
 
   const desktopMask = ambient
     ? "linear-gradient(90deg, transparent 0%, black 28%, black 100%)"
     : mask === "radial"
       ? "radial-gradient(ellipse 62% 72% at 58% 48%, black 42%, transparent 78%)"
       : "linear-gradient(90deg, transparent 0%, black 16%, black 100%)";
-  const mobileMask = ambient
-    ? "linear-gradient(180deg, black 8%, black 28%, transparent 72%)"
-    : "linear-gradient(180deg, black 18%, black 42%, transparent 88%)";
 
   return (
     <div
@@ -69,32 +60,26 @@ export default function CharacterBackground({
       <div
         className={
           ambient
-            ? "absolute right-[-20%] top-[4%] h-[220px] w-[220px] rounded-full blur-3xl md:right-[-4%] md:top-[18%] md:h-[360px] md:w-[360px]"
-            : "absolute right-[-12%] top-[8%] h-[260px] w-[260px] rounded-full blur-3xl md:right-[8%] md:top-[18%] md:h-[420px] md:w-[420px]"
+            ? "absolute right-[-18%] top-0 h-[200px] w-[200px] rounded-full blur-3xl md:right-[-4%] md:top-[18%] md:h-[360px] md:w-[360px]"
+            : "absolute right-[-8%] top-[8%] h-[240px] w-[240px] rounded-full blur-3xl md:right-[8%] md:top-[18%] md:h-[420px] md:w-[420px]"
         }
         style={{ background: "var(--glow)" }}
       />
-      {ambient ? null : (
-        <div
-          className="absolute bottom-[18%] left-[-10%] h-[180px] w-[180px] rounded-full blur-3xl md:bottom-[8%] md:left-auto md:right-[28%] md:h-[280px] md:w-[280px]"
-          style={{
-            background: "color-mix(in srgb, var(--accent) 35%, transparent)",
-          }}
-        />
-      )}
 
       <div
-        className="absolute md:hidden"
+        className={
+          ambient
+            ? "absolute right-0 top-14 h-40 w-28 overflow-hidden md:hidden"
+            : "absolute inset-0 md:hidden"
+        }
         style={{
-          top: ambient ? "-4%" : "-8%",
-          right: ambient ? "-28%" : "-18%",
-          width: ambient ? "88%" : "108%",
-          height: ambient ? "46%" : "68%",
-          opacity: mobileOpacity,
-          transform: `scale(${Math.max(scale * 0.92, 0.9)})`,
-          transformOrigin: "right top",
-          maskImage: mobileMask,
-          WebkitMaskImage: mobileMask,
+          opacity: isLight ? (ambient ? 0.22 : 0.92) : ambient ? 0.34 : 1,
+          maskImage: ambient
+            ? "linear-gradient(180deg, black 20%, transparent 100%), linear-gradient(90deg, transparent 0%, black 30%)"
+            : "linear-gradient(to top, transparent 0%, black 28%)",
+          WebkitMaskImage: ambient
+            ? "linear-gradient(180deg, black 20%, transparent 100%), linear-gradient(90deg, transparent 0%, black 30%)"
+            : "linear-gradient(to top, transparent 0%, black 28%)",
         }}
       >
         <Image
@@ -102,12 +87,22 @@ export default function CharacterBackground({
           alt={alt}
           fill
           priority={!ambient}
-          quality={ambient ? 50 : 70}
+          quality={ambient ? 45 : 72}
           sizes="100vw"
-          className="object-contain object-right-top"
-          style={{ objectPosition: position }}
+          className="object-cover"
+          style={{ objectPosition: thumbPosition }}
         />
       </div>
+
+      {ambient ? null : (
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/2 md:hidden"
+          style={{
+            background:
+              "linear-gradient(to top, var(--background) 8%, color-mix(in srgb, var(--background) 70%, transparent) 46%, transparent 100%)",
+          }}
+        />
+      )}
 
       <div
         className="absolute hidden md:block"
@@ -136,11 +131,17 @@ export default function CharacterBackground({
       </div>
 
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 hidden md:block"
         style={{
           background: ambient
-            ? "linear-gradient(180deg, color-mix(in srgb, var(--background) 18%, transparent) 0%, var(--background) 58%), linear-gradient(90deg, var(--background) 0%, color-mix(in srgb, var(--background) 88%, transparent) 42%, transparent 100%)"
-            : "linear-gradient(180deg, color-mix(in srgb, var(--background) 12%, transparent) 0%, color-mix(in srgb, var(--background) 35%, transparent) 38%, var(--background) 86%), linear-gradient(90deg, var(--background) 0%, color-mix(in srgb, var(--background) 70%, transparent) 36%, transparent 78%)",
+            ? "linear-gradient(90deg, var(--background) 0%, color-mix(in srgb, var(--background) 96%, transparent) 58%, transparent 88%)"
+            : "linear-gradient(90deg, var(--background) 0%, color-mix(in srgb, var(--background) 94%, transparent) 34%, transparent 76%)",
+        }}
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 hidden h-[38%] md:block"
+        style={{
+          background: "linear-gradient(to top, var(--background), transparent)",
         }}
       />
     </div>

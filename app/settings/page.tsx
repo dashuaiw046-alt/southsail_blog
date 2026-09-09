@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function SettingsPage() {
   return (
     <PageShell>
-      <main className="mx-auto min-h-[70vh] max-w-4xl px-6 py-20 lg:px-8">
+      <main className="mx-auto min-h-[70vh] max-w-4xl px-5 py-12 md:px-6 md:py-20 lg:px-8">
         <SectionHeading
           eyebrow="Preferences"
           title="Settings"

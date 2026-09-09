@@ -17,27 +17,29 @@ export default function Home() {
   return (
     <PageShell transparentNav>
       <main>
-        <section className="relative flex min-h-[100svh] items-end overflow-hidden md:items-center">
-          <CharacterBackground />
+        <section className="relative md:flex md:min-h-screen md:items-center md:overflow-hidden">
+          <div className="relative h-[46svh] min-h-[280px] overflow-hidden md:absolute md:inset-0 md:h-auto md:min-h-0">
+            <CharacterBackground />
+          </div>
           <div
-            className="pointer-events-none absolute left-[8%] top-[58%] z-0 h-[180px] w-[180px] -translate-y-1/2 rounded-full blur-3xl md:left-[18%] md:top-[42%] md:h-[320px] md:w-[320px]"
+            className="pointer-events-none absolute left-[12%] top-[62%] z-0 hidden h-[320px] w-[320px] -translate-y-1/2 rounded-full blur-3xl md:block md:left-[18%] md:top-[42%]"
             style={{ background: "color-mix(in srgb, var(--accent) 28%, transparent)" }}
           />
-          <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-28 md:py-32 lg:px-8">
+          <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-12 pt-7 md:px-6 md:py-32 lg:px-8">
             <HeroContent>
             <div className="max-w-3xl">
-              <p className="mb-6 text-sm font-medium uppercase tracking-[0.3em] text-[var(--primary)]">
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.22em] text-[var(--primary)] sm:mb-6 sm:text-sm sm:tracking-[0.3em]">
                 Cybersecurity · CTF · Coding
               </p>
-              <h1 className="text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl">
+              <h1 className="text-[2.6rem] font-bold leading-[1.05] tracking-tight sm:text-7xl lg:text-8xl">
                 Hi, I&apos;m
                 <span className="block text-[var(--muted)]">southsail.</span>
               </h1>
-              <p className="mt-8 max-w-2xl text-lg leading-8 text-[var(--muted)]">
+              <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--muted)] sm:mt-8 sm:text-lg sm:leading-8">
                 A personal space for cybersecurity, CTF writeups, programming
                 projects, and everything I&apos;m learning along the way.
               </p>
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
                 <Link
                   href="/articles"
                   className="rounded-full px-6 py-3 text-sm font-medium transition-transform hover:scale-105"
@@ -70,10 +72,10 @@ export default function Home() {
           className="border-t"
           style={{ borderColor: "var(--border)" }}
         >
-          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-            <div className="mb-12 flex items-end justify-between gap-6">
+          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
+            <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
               <div>
-                <p className="text-sm uppercase tracking-[0.25em] text-[var(--primary)]">
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
                   Latest
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold">Articles</h2>
@@ -95,10 +97,10 @@ export default function Home() {
           className="border-t"
           style={{ borderColor: "var(--border)" }}
         >
-          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-            <div className="mb-12 flex items-end justify-between gap-6">
+          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
+            <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
               <div>
-                <p className="text-sm uppercase tracking-[0.25em] text-[var(--primary)]">
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
                   Practice
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold">Recent CTF</h2>
@@ -120,10 +122,10 @@ export default function Home() {
           className="border-t"
           style={{ borderColor: "var(--border)" }}
         >
-          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-            <div className="mb-12 flex items-end justify-between gap-6">
+          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
+            <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
               <div>
-                <p className="text-sm uppercase tracking-[0.25em] text-[var(--primary)]">
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
                   Build
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold">Projects</h2>
@@ -145,8 +147,8 @@ export default function Home() {
           className="border-t"
           style={{ borderColor: "var(--border)" }}
         >
-          <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-            <p className="text-sm uppercase tracking-[0.25em] text-[var(--primary)]">
+          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
               About
             </p>
             <div className="mt-8 max-w-3xl">

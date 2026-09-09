@@ -31,7 +31,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           : "color-mix(in srgb, var(--background) 88%, transparent)",
       }}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-6 md:py-4 lg:px-8">
         <Link href="/" className="text-lg font-semibold tracking-tight">
           southsail
         </Link>
@@ -57,20 +57,17 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           <ThemeSwitcher />
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
-          <ThemeSwitcher compact={false} />
-          <button
-            type="button"
-            className="rounded-full border px-3 py-2 text-sm"
-            style={{ borderColor: "var(--border)", color: "var(--muted)" }}
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            aria-label="Toggle navigation"
-          >
-            {open ? "Close" : "Menu"}
-          </button>
-        </div>
+        <button
+          type="button"
+          className="rounded-full border px-3 py-2 text-sm md:hidden"
+          style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          aria-label="Toggle navigation"
+        >
+          {open ? "Close" : "Menu"}
+        </button>
       </nav>
 
       {open ? (
@@ -109,6 +106,9 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           >
             Settings
           </Link>
+          <div className="pt-2">
+            <ThemeSwitcher compact={false} />
+          </div>
         </div>
       ) : null}
     </header>

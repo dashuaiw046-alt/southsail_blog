@@ -26,7 +26,7 @@ export default function ArticleLayout({
   children,
 }: ArticleLayoutProps) {
   return (
-    <main className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
+    <main className="mx-auto max-w-6xl px-5 py-10 md:px-6 md:py-16 lg:px-8">
       <Link href={backHref} className="text-sm text-[var(--primary)]">
         ← {backLabel}
       </Link>
@@ -38,7 +38,7 @@ export default function ArticleLayout({
                 {item.category}
               </p>
             ) : null}
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">
               {item.title}
             </h1>
             {item.description ? (
@@ -62,7 +62,20 @@ export default function ArticleLayout({
             ) : null}
             {extra}
           </header>
-          <div className="mt-10">{children}</div>
+          {item.toc.length > 0 ? (
+            <details
+              className="mt-8 rounded-2xl border px-4 py-3 xl:hidden"
+              style={{ borderColor: "var(--border)", background: "var(--surface)" }}
+            >
+              <summary className="cursor-pointer text-sm text-[var(--muted)]">
+                Contents
+              </summary>
+              <div className="mt-4">
+                <TableOfContents items={item.toc} />
+              </div>
+            </details>
+          ) : null}
+          <div className="mt-8 md:mt-10">{children}</div>
           <NeighborNav basePath={backHref} previous={previous} next={next} />
         </article>
         <aside className="hidden xl:block">

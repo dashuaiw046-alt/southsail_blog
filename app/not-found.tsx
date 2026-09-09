@@ -5,7 +5,7 @@ import PageShell from "@/components/layout/PageShell";
 export default function NotFound() {
   return (
     <PageShell>
-      <main className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-start justify-center px-6 py-24 lg:px-8">
+      <main className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-start justify-center px-5 py-16 md:px-6 md:py-24 lg:px-8">
         <p className="text-sm uppercase tracking-[0.25em] text-[var(--primary)]">
           404
         </p>

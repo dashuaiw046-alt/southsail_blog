@@ -34,7 +34,7 @@ export default function CodeBlock({
       }}
     >
       <div
-        className="flex items-center justify-between gap-3 border-b px-4 py-2 text-xs"
+        className="flex items-center justify-between gap-3 border-b px-3 py-2 text-xs sm:px-4"
         style={{ borderColor: "var(--border)", color: "var(--muted)" }}
       >
         <div className="flex min-w-0 items-center gap-3">
@@ -54,7 +54,7 @@ export default function CodeBlock({
       </div>
       <pre
         {...props}
-        className={`overflow-x-auto p-4 text-sm leading-7 ${className ?? ""}`}
+        className={`max-w-full overflow-x-auto p-3 text-[13px] leading-6 sm:p-4 sm:text-sm sm:leading-7 ${className ?? ""}`}
       >
         {children}
       </pre>

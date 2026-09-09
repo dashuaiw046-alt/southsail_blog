@@ -146,13 +146,21 @@ body {
 
 @media (max-width: 767px) {
   .article-body {
+    max-width: 100%;
     font-size: 1rem;
+  }
+
+  .article-body h1 {
+    font-size: 1.55rem;
+  }
+
+  .article-body h2 {
+    font-size: 1.28rem;
   }
 
   body {
     background:
-      radial-gradient(ellipse 90% 42% at 80% 0%, var(--glow), transparent 58%),
-      radial-gradient(ellipse 70% 36% at 10% 100%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 62%),
+      radial-gradient(ellipse 90% 34% at 70% 0%, var(--glow), transparent 62%),
       var(--background);
   }
 }

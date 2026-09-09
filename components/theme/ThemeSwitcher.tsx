@@ -28,7 +28,7 @@ export default function ThemeSwitcher({ compact = true }: ThemeSwitcherProps) {
           id={selectId}
           value={themeId}
           onChange={(event) => setThemeId(event.target.value as typeof themeId)}
-          className="appearance-none rounded-full border bg-black/20 py-2 pl-7 pr-10 text-sm backdrop-blur-md outline-none transition-all focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+          className="max-w-[11.5rem] appearance-none rounded-full border bg-black/20 py-2 pl-7 pr-10 text-sm backdrop-blur-md outline-none transition-all focus-visible:ring-2 focus-visible:ring-[var(--primary)] sm:max-w-none"
           style={{
             borderColor: "var(--border)",
             color: "var(--foreground)",
