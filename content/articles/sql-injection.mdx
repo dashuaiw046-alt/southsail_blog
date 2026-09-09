@@ -1,0 +1,60 @@
+---
+title: "SQL Injection 学习笔记"
+description: "从输入点、查询拼接到参数化查询，梳理 SQL 注入的核心原理。"
+date: "2026-09-08"
+category: "Web Security"
+tags: ["SQL", "Web", "Security"]
+---
+
+# SQL Injection 学习笔记
+
+SQL 注入本质上是数据和指令边界被打破。当应用程序把不可信输入直接拼进查询语句时，攻击者就能改写原计划执行的 SQL。
+
+> 防御的核心不是“过滤特殊字符”，而是让数据和指令始终分离。
+
+## 问题从哪里开始
+
+常见入口包括：
+
+- URL 查询参数
+- 表单字段
+- HTTP Header
+- Cookie
+- JSON / XML 解析后进入查询的字段
+
+只要值最终进入 SQL，就需要把它当数据，而不是语句的一部分。
+
+## 一个最小示例
+
+危险写法会把输入直接拼进语句：
+
+```python title="unsafe.py"
+query = f"SELECT * FROM users WHERE id = {user_id}"
+cursor.execute(query)
+```
+
+安全写法使用参数化查询：
+
+```python title="safe.py"
+cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+```
+
+## 学习要点
+
+- 识别危险的字符串拼接。
+- 使用参数化查询或 ORM 绑定。
+- 为数据库账号配置最小权限。
+- 对输出做编码，避免二次问题。
+
+## 检查清单
+
+| 检查项 | 为什么重要 |
+| --- | --- |
+| 参数化查询 | 把用户输入限制为数据 |
+| 最小权限 | 即使注入成功，也能缩小影响面 |
+| 错误信息 | 避免把 SQL 细节直接回给客户端 |
+| 日志 | 记录异常查询，便于复盘 |
+
+## 参考路径
+
+继续阅读 [文件上传漏洞学习笔记](/articles/file-upload) 和 [XXE：从 XML 到外部实体](/articles/xxe)。

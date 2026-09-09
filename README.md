@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# southsail Blog
 
-## Getting Started
+Personal technical blog covering cybersecurity, CTF, programming, cryptography and learning notes.
 
-First, run the development server:
+Technology First · Character Themed. Character art is a visual layer only.
+
+## Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — local development
+- `npm run lint` — ESLint
+- `npm run build` — production build
+- `npm run start` — serve the production build
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+The app is a standard Next.js server deployment. Vercel is the simplest path.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+GitHub profile used by the site: [dashuaiw046-alt](https://github.com/dashuaiw046-alt).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create a repository under that account, then push this folder.
+2. Import the project in [Vercel](https://vercel.com/new). Root directory is this folder (`southsail_blog`).
+3. After the first deploy, copy the production URL.
+4. In Vercel → Project → Settings → Environment Variables, set:
 
-## Deploy on Vercel
+```txt
+NEXT_PUBLIC_SITE_URL=https://your-project.vercel.app
+NEXT_PUBLIC_GITHUB_URL=https://github.com/dashuaiw046-alt
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Redeploy so `sitemap.xml`, `robots.txt`, and Open Graph URLs use the public origin.
+6. Custom domain (optional): Vercel → Project → Settings → Domains, then update `NEXT_PUBLIC_SITE_URL` to that domain and redeploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Add an article
+
+1. Create `content/articles/<slug>.mdx`
+2. Add frontmatter:
+
+```md
+---
+title: ""
+description: ""
+date: "2026-09-09"
+category: ""
+tags: []
+---
+```
+
+3. The list at `/articles` and the page at `/articles/<slug>` are generated automatically.
+
+## Add a CTF writeup
+
+1. Create `content/ctf/<slug>.mdx`
+2. Add frontmatter:
+
+```md
+---
+title: ""
+category: ""
+difficulty: 3
+platform: ""
+date: "2026-09-09"
+tags: []
+---
+```
+
+3. The list at `/ctf` and the page at `/ctf/<slug>` are generated automatically.
+
+## Add a project
+
+Edit `lib/projects.ts` and append an item. Leave `github` / `demo` empty until a real URL exists.
+
+## Add a character theme
+
+1. Put the image in `public/characters/<series>/<file>.png`
+2. Add a theme in `lib/themes.ts`
+3. Keep the theme `id` stable; the image filename does not have to match the id

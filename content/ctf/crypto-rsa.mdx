@@ -1,0 +1,46 @@
+---
+title: "Crypto：RSA 参数复用"
+description: "从公开指数和模数关系入手，练习 RSA 参数复用分析。"
+category: "Cryptography"
+difficulty: 3
+platform: "Practice"
+date: "2026-08-20"
+tags: ["RSA", "Crypto"]
+---
+
+# Crypto：RSA 参数复用
+
+当多个密文复用了相同模数或存在可利用的参数关系时，应先检查公钥集合之间的数学联系。
+
+## 题目
+
+拿到若干组公钥和对应密文。不要先急着分解大整数，先看这些公钥是不是“看起来独立、实际上共享了不该共享的东西”。
+
+## 分析顺序
+
+1. 列出所有 `n` 和 `e`
+2. 检查是否存在相同模数
+3. 检查不同模数之间是否有非平凡公约数
+4. 只有在参数关系走不通时，才考虑更重的分解路径
+
+```python title="gcd_check.py"
+from math import gcd
+
+def shared_prime(n1: int, n2: int) -> int | None:
+    g = gcd(n1, n2)
+    if 1 < g < n1:
+        return g
+    return None
+```
+
+## Writeup
+
+这次练习里，关键不是“算出 flag 的那一行”，而是确认：
+
+- 哪些参数被复用
+- 复用为什么会泄漏
+- 拿到因子之后如何恢复明文
+
+## 备注
+
+这里只记录方法，不放比赛平台、真实 flag 或未授权环境信息。
