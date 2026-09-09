@@ -22,21 +22,13 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
   const [open, setOpen] = useState(false);
 
   return (
-    <header
-      className={`z-40 border-b backdrop-blur-xl ${transparent ? "absolute inset-x-0 top-0" : "sticky top-0"}`}
-      style={{
-        borderColor: transparent ? "transparent" : "var(--border)",
-        background: transparent
-          ? "transparent"
-          : "color-mix(in srgb, var(--background) 88%, transparent)",
-      }}
-    >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-6 md:py-4 lg:px-8">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
+    <header className={`site-header${transparent ? " is-transparent" : ""}`}>
+      <nav className="site-nav">
+        <Link href="/" className="site-logo">
           southsail
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="nav-desktop">
           {links.map((link) => {
             const active = isActive(pathname, link.href);
 
@@ -44,10 +36,9 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm transition-colors"
+                className="text-sm"
                 style={{
                   color: active ? "var(--foreground)" : "var(--muted)",
-                  textShadow: active ? "0 0 18px var(--glow)" : undefined,
                 }}
               >
                 {link.label}
@@ -59,8 +50,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
 
         <button
           type="button"
-          className="rounded-full border px-3 py-2 text-sm md:hidden"
-          style={{ borderColor: "var(--border)", color: "var(--muted)" }}
+          className="nav-toggle"
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           aria-controls="mobile-nav"
@@ -71,14 +61,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
       </nav>
 
       {open ? (
-        <div
-          id="mobile-nav"
-          className="space-y-4 border-t px-6 py-4 md:hidden"
-          style={{
-            borderColor: "var(--border)",
-            background: "color-mix(in srgb, var(--background) 94%, transparent)",
-          }}
-        >
+        <div id="mobile-nav" className="nav-mobile">
           {links.map((link) => {
             const active = isActive(pathname, link.href);
 
@@ -87,7 +70,6 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block text-sm"
                 style={{ color: active ? "var(--foreground)" : "var(--muted)" }}
               >
                 {link.label}
@@ -97,7 +79,6 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           <Link
             href="/settings"
             onClick={() => setOpen(false)}
-            className="block text-sm"
             style={{
               color: pathname.startsWith("/settings")
                 ? "var(--foreground)"
@@ -106,7 +87,7 @@ export default function Navbar({ transparent = false }: { transparent?: boolean 
           >
             Settings
           </Link>
-          <div className="pt-2">
+          <div style={{ paddingTop: "0.75rem" }}>
             <ThemeSwitcher compact={false} />
           </div>
         </div>

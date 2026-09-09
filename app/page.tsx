@@ -20,7 +20,7 @@ export default function Home() {
       <main>
         <MobileHero />
 
-        <section className="relative hidden min-h-screen items-center overflow-hidden md:flex">
+        <section className="hero-desktop">
           <CharacterBackground />
           <div
             className="pointer-events-none absolute left-[18%] top-[42%] z-0 h-[320px] w-[320px] -translate-y-1/2 rounded-full blur-3xl"
@@ -41,25 +41,10 @@ export default function Home() {
                 projects, and everything I&apos;m learning along the way.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
-                <Link
-                  href="/articles"
-                  className="rounded-full px-6 py-3 text-sm font-medium transition-transform hover:scale-105"
-                  style={{
-                    background: "var(--foreground)",
-                    color: "var(--background)",
-                  }}
-                >
+                <Link href="/articles" className="btn-solid">
                   Explore Articles
                 </Link>
-                <Link
-                  href="/about"
-                  className="rounded-full border px-6 py-3 text-sm font-medium backdrop-blur transition-colors"
-                  style={{
-                    borderColor: "var(--border)",
-                    background: "var(--surface)",
-                    color: "var(--foreground)",
-                  }}
-                >
+                <Link href="/about" className="btn-ghost">
                   About Me
                 </Link>
               </div>
@@ -68,13 +53,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="articles"
-          className="border-t"
-          style={{ borderColor: "var(--border)" }}
-        >
-          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
-            <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
+        <section id="articles" className="section">
+          <div className="page-main" style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <div className="section-head">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
                   Latest
@@ -85,7 +66,7 @@ export default function Home() {
                 All articles →
               </Link>
             </div>
-            <div className="grid gap-5 md:grid-cols-3">
+            <div className="section-grid is-articles">
               {articles.map((item) => (
                 <ArticleCard key={item.slug} item={item} />
               ))}
@@ -93,13 +74,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="ctf"
-          className="border-t"
-          style={{ borderColor: "var(--border)" }}
-        >
-          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
-            <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
+        <section id="ctf" className="section">
+          <div className="page-main" style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <div className="section-head">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
                   Practice
@@ -110,7 +87,7 @@ export default function Home() {
                 All writeups →
               </Link>
             </div>
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="section-grid">
               {writeups.map((item) => (
                 <CtfCard key={item.slug} item={item} />
               ))}
@@ -118,13 +95,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="projects"
-          className="border-t"
-          style={{ borderColor: "var(--border)" }}
-        >
-          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
-            <div className="mb-8 flex items-end justify-between gap-6 md:mb-12">
+        <section id="projects" className="section">
+          <div className="page-main" style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <div className="section-head">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
                   Build
@@ -135,7 +108,7 @@ export default function Home() {
                 All projects →
               </Link>
             </div>
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="section-grid">
               {projects.map((project) => (
                 <ProjectCard key={project.slug} project={project} />
               ))}
@@ -143,12 +116,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section
-          id="about"
-          className="border-t"
-          style={{ borderColor: "var(--border)" }}
-        >
-          <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-24 lg:px-8">
+        <section id="about" className="section">
+          <div className="page-main" style={{ paddingTop: 0, paddingBottom: 0 }}>
             <p className="text-xs uppercase tracking-[0.22em] text-[var(--primary)] sm:text-sm sm:tracking-[0.25em]">
               About
             </p>

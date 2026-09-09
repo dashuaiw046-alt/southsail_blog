@@ -4,7 +4,7 @@ import { statusLabel } from "@/lib/projects";
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <article
-      className="rounded-2xl border p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-[var(--surface-hover)]"
+      className="card"
       style={{
         borderColor: "var(--border)",
         background: "var(--surface)",

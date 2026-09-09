@@ -89,7 +89,9 @@ export const mdxComponents = {
   h2: (props: ComponentPropsWithoutRef<"h2">) => <Heading as="h2" {...props} />,
   h3: (props: ComponentPropsWithoutRef<"h3">) => <Heading as="h3" {...props} />,
   p: (props: ComponentPropsWithoutRef<"p">) => <p {...props} />,
-  a: SmartLink,
+  a: (props: ComponentPropsWithoutRef<"a">) => (
+    <SmartLink {...props} style={{ color: "var(--primary)" }} />
+  ),
   img: MDXImage,
   blockquote: (props: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote {...props} />

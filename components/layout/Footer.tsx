@@ -12,7 +12,7 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="border-t" style={{ borderColor: "var(--border)" }}>
+    <footer className="site-footer">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-8 text-sm md:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <div className="flex flex-col gap-1" style={{ color: "var(--muted)" }}>
           <span>© 2026 southsail</span>

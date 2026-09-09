@@ -17,13 +17,13 @@ export default function ArticlesPage() {
 
   return (
     <PageShell>
-      <main className="mx-auto min-h-[70vh] max-w-7xl px-5 pb-12 pt-6 md:px-6 md:py-20 lg:px-8">
+      <main className="page-main">
         <SectionHeading
           eyebrow="Knowledge base"
           title="Articles"
           description="Technical notes on web security, programming, and the things I am still figuring out."
         />
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="section-grid is-articles">
           {items.map((item) => (
             <ArticleCard key={item.slug} item={item} />
           ))}

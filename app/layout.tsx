@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { site } from "@/lib/site";
 import { themeBootScript } from "@/lib/theme-boot";
 import "./globals.css";
+import "./compat.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

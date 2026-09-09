@@ -27,14 +27,14 @@ export default function CodeBlock({
 
   return (
     <div
-      className="group relative my-6 overflow-hidden rounded-2xl border"
+      className="code-block"
       style={{
         borderColor: "var(--border)",
         background: "color-mix(in srgb, var(--background) 72%, black)",
       }}
     >
       <div
-        className="flex items-center justify-between gap-3 border-b px-3 py-2 text-xs sm:px-4"
+        className="code-block-bar"
         style={{ borderColor: "var(--border)", color: "var(--muted)" }}
       >
         <div className="flex min-w-0 items-center gap-3">
