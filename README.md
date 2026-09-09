@@ -43,6 +43,26 @@ NEXT_PUBLIC_GITHUB_URL=https://github.com/dashuaiw046-alt
 
 Same repository also works on Vercel if that account becomes available later. Set the same two environment variables there.
 
+## Publish a note
+
+Put a finished Markdown file on GitHub. Netlify updates the live blog after the push.
+
+```bash
+npm run note -- D:\notes\sql-injection.md
+npm run note -- --ctf D:\notes\rsa-writeup.md
+```
+
+The script copies the file into `content/`, fills missing frontmatter, commits, and pushes.
+
+- `--article` default, writes to `content/articles/`
+- `--ctf` writes to `content/ctf/`
+- `--force` overwrite an existing slug
+- `--no-push` commit only
+- `--dry-run` print actions without writing
+- `--push-content` publish files you already put in `content/`
+
+If frontmatter is missing, title/description/date are inferred. You can still write the file directly:
+
 ## Add an article
 
 1. Create `content/articles/<slug>.mdx`
