@@ -3,6 +3,8 @@
 > Technology First · Character Themed  
 > southsail 的个人技术博客。技术内容是主体，角色主题只做视觉层。
 
+更新时间：2026-09-09
+
 ---
 
 ## 1. 项目是什么
@@ -37,6 +39,9 @@
 - 全站路由与统一布局
 - MDX 文章 / CTF 内容系统
 - 角色主题 + 明暗外观
+- 桌面 Hero 与独立的手机 Hero
+- 文章页手机端角色肖像条
+- Honor / 百度等旧内核浏览器的 CSS 兼容层
 - SEO（title、description、Open Graph、robots、sitemap）
 - Netlify 自动部署
 - 本地一键发布 Markdown 笔记
@@ -47,7 +52,7 @@
 - 网站内直接上传文件
 - 搜索、RSS
 
-内容方面：现在仓库里还是示例笔记。真实笔记需要你之后用发布脚本或直接改 `content/` 添加。
+内容方面：现在仓库里还是示例笔记。真实笔记需要之后用发布脚本或直接改 `content/` 添加。
 
 ---
 
@@ -55,13 +60,14 @@
 
 - Next.js 16（App Router、Turbopack）
 - React 19 + TypeScript strict
-- Tailwind CSS 4
+- Tailwind CSS 4（桌面 / 现代浏览器）
+- `app/compat.css`：不依赖 Tailwind `@layer` 的布局，给旧手机浏览器兜底
 - MDX：`next-mdx-remote` + `gray-matter` + `remark-gfm`
 - 代码高亮：`rehype-pretty-code` + Shiki
-- 动画：Framer Motion
-- 部署：Netlify（`@netlify/plugin-nextjs`）
+- 动画：Framer Motion（桌面）；手机端避免用它包整页，减少空白
+- 部署：Netlify
 
-优先 Server Components。只有主题切换、导航菜单、代码复制、动画等交互使用 `"use client"`。
+优先 Server Components。只有主题切换、导航菜单、代码复制、手机 Hero 等交互使用 `"use client"`。
 
 ---
 
@@ -69,7 +75,7 @@
 
 | 路径 | 说明 |
 | --- | --- |
-| `/` | 首页：Hero + 最新文章 + 最近 CTF + 项目 + About |
+| `/` | 首页：手机用 `MobileHero`，桌面用原 Hero；下面是最新文章 / CTF / 项目 / About |
 | `/articles` | 文章列表（自动读 `content/articles/`） |
 | `/articles/[slug]` | 文章详情 |
 | `/ctf` | CTF 列表（自动读 `content/ctf/`） |
@@ -83,6 +89,8 @@
 - `components/layout/Navbar.tsx`
 - `components/layout/Footer.tsx`
 - `components/layout/PageShell.tsx`
+- `components/layout/MobileHero.tsx`（仅手机首页）
+- `components/theme/MobilePortrait.tsx`（手机内页顶部肖像）
 
 内部跳转全部用 Next.js `Link`。
 
@@ -92,13 +100,22 @@
 
 ```text
 southsail_blog/
-├── app/                     路由与 SEO
+├── app/
+│   ├── compat.css           旧手机浏览器布局兜底
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── articles/
+│   ├── ctf/
+│   ├── projects/
+│   ├── about/
+│   └── settings/
 ├── components/
 │   ├── article/             文章渲染、TOC、代码块
 │   ├── ctf/
-│   ├── layout/
+│   ├── layout/              Navbar、Footer、MobileHero、PageShell
 │   ├── project/
-│   ├── theme/               主题与立绘背景
+│   ├── theme/               ThemeProvider、立绘、MobilePortrait
 │   └── ui/
 ├── content/
 │   ├── articles/            文章 MDX
@@ -108,9 +125,13 @@ southsail_blog/
 │   ├── projects.ts          项目数据
 │   ├── themes.ts            角色主题唯一数据源
 │   ├── theme-store.ts       主题状态（localStorage）
+│   ├── theme-boot.ts        进页前写入 CSS 变量，避免闪白
 │   └── site.ts              站点名、URL、GitHub
 ├── public/characters/       本地角色立绘
 ├── scripts/                 发布笔记脚本
+│   ├── publish.mjs
+│   ├── pick-note.ps1
+│   └── publish-note.cmd
 ├── netlify.toml
 └── PROJECT.md               本文件
 ```
@@ -130,13 +151,21 @@ southsail_blog/
 | `feiying` | 绯英 | `/characters/starrail/feiying.png` |
 | `yaoguangying` | 爻光 | `/characters/starrail/yaoguang.png` |
 
-配置只写在 `lib/themes.ts`。`CharacterBackground` 从这里读图。
+配置只写在 `lib/themes.ts`。
 
-- 首页 Hero：立绘较完整
-- 其他页面：同一张立绘做右侧淡背景，不挡正文
-- 手机端不显示立绘
-- 外观：Dark / Light / System，和角色主题共用一套 `ThemeProvider`
-- 持久化：`localStorage` 的 `southsail-theme`、`southsail-appearance`
+桌面：
+
+- 首页 Hero：`CharacterBackground`，左文右立绘
+- 其他页面：右侧淡立绘，不挡正文
+
+手机：
+
+- 首页：独立卡片 `MobileHero`，上半肖像、下半文字和按钮
+- 文章 / CTF / Projects / About / Settings：顶部 `MobilePortrait` 肖像条
+- 立绘用普通 `<img>`，不走 `next/image`，避免部分手机不出图
+
+外观：Dark / Light / System，和角色主题共用一套 `ThemeProvider`。  
+持久化：`localStorage` 的 `southsail-theme`、`southsail-appearance`。
 
 新增角色：把图放到 `public/characters/`，再在 `themes.ts` 加一项。
 
@@ -222,9 +251,10 @@ npm run note -- --ctf D:\notes\rsa.md
 
 - `scripts/publish.mjs` 主逻辑
 - `scripts/pick-note.ps1` 文件框 / 模块选择框
+- `scripts/publish-note.cmd` 桌面快捷方式入口
 
 推送使用 SSH：`git@github.com:dashuaiw046-alt/southsail_blog.git`  
-本机密钥：`C:\Users\31205\.ssh\id_ed25519_github`（走 443 端口，因为 HTTPS 会被重置）
+本机密钥：`C:\Users\31205\.ssh\id_ed25519_github`（走 443 端口，因为本机 HTTPS 会被重置）
 
 ---
 
@@ -249,10 +279,10 @@ npm run note
 
 ## 10. 部署
 
-当前托管在 **Netlify**，不在 Vercel（Vercel 账号工单 `01528299` 未完成，已改用 Netlify）。
+当前托管在 **Netlify**。Vercel 账号工单 `01528299` 未完成，已改用 Netlify。
 
 - 生产域名：https://southsail.netlify.app
-- 构建：push `master` 自动部署
+- 构建：push `master` 自动部署，一般 1–3 分钟
 - 环境变量：
 
 ```txt
@@ -266,7 +296,26 @@ NEXT_PUBLIC_GITHUB_URL=https://github.com/dashuaiw046-alt
 
 ---
 
-## 11. 设计原则
+## 11. 手机端注意
+
+Honor 百度浏览器会丢掉 Tailwind v4 的 `@layer` 工具类，看起来像「只有字、链接变紫、两套 Hero 叠在一起」。
+
+对策已经加上：
+
+- `app/compat.css`：导航、Hero 卡片、文章页、代码块用普通 CSS
+- 手机立绘用原生 `<img>`
+- 桌面 Hero 类名 `hero-desktop`，手机 Hero 类名 `hero-mobile`，互不缩小套用
+
+测手机时：
+
+1. 优先用 Chrome 或系统浏览器
+2. 若用百度 / Honor 浏览器，部署后请关掉标签再打开，避免缓存
+3. 首页应看到上半角色、下半文字的卡片
+4. 文章页顶部应有一条角色肖像
+
+---
+
+## 12. 设计原则
 
 - 技术博客优先，角色主题是皮肤
 - 现代、克制、偏 Vercel / Linear 气质，暗色为主
@@ -276,7 +325,7 @@ NEXT_PUBLIC_GITHUB_URL=https://github.com/dashuaiw046-alt
 
 ---
 
-## 12. 接下来可以做的
+## 13. 接下来可以做的
 
 按优先级：
 
@@ -285,4 +334,4 @@ NEXT_PUBLIC_GITHUB_URL=https://github.com/dashuaiw046-alt
 3. 有自己的域名时，在 Netlify 绑定并更新 `NEXT_PUBLIC_SITE_URL`
 4. 可选下一阶段：搜索、RSS、仅自己能登录的 Git 后台
 
-第一版目标已经完成。
+第一版产品骨架已经完成。后续主要是填内容和偶尔修手机浏览器兼容。
