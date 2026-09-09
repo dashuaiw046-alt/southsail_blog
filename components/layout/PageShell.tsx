@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import CharacterBackground from "@/components/theme/CharacterBackground";
+import MobilePortrait from "@/components/theme/MobilePortrait";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import PageFade from "./PageFade";
@@ -18,6 +19,7 @@ export default function PageShell({
     <div className="relative min-h-screen text-[var(--foreground)]">
       {transparentNav ? null : <CharacterBackground variant="ambient" />}
       <Navbar transparent={transparentNav} />
+      {transparentNav ? null : <MobilePortrait />}
       <div className="relative z-10">
         <PageFade>{children}</PageFade>
         <Footer />

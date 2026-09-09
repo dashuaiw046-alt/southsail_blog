@@ -17,7 +17,7 @@ export default function ArticlesPage() {
 
   return (
     <PageShell>
-      <main className="mx-auto min-h-[70vh] max-w-7xl px-5 py-12 md:px-6 md:py-20 lg:px-8">
+      <main className="mx-auto min-h-[70vh] max-w-7xl px-5 pb-12 pt-6 md:px-6 md:py-20 lg:px-8">
         <SectionHeading
           eyebrow="Knowledge base"
           title="Articles"

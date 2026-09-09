@@ -26,7 +26,7 @@ export default function ArticleLayout({
   children,
 }: ArticleLayoutProps) {
   return (
-    <main className="mx-auto max-w-6xl px-5 py-10 md:px-6 md:py-16 lg:px-8">
+    <main className="mx-auto max-w-6xl px-5 pb-10 pt-5 md:px-6 md:py-16 lg:px-8">
       <Link href={backHref} className="text-sm text-[var(--primary)]">
         ← {backLabel}
       </Link>

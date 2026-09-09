@@ -1,56 +1,43 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 import { getTheme } from "@/lib/themes";
 import { useTheme } from "@/components/theme/ThemeProvider";
 
 export default function MobileHero() {
-  const { themeId, resolvedAppearance } = useTheme();
+  const { themeId } = useTheme();
   const theme = getTheme(themeId);
   const character = theme.character;
-  const isLight = resolvedAppearance === "light";
 
   return (
     <section className="px-4 pb-8 pt-20 md:hidden">
-      <motion.article
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+      <article
         className="overflow-hidden rounded-[28px] border"
         style={{
           borderColor: "var(--border)",
           background: "var(--surface)",
-          boxShadow: "0 0 48px var(--glow)",
+          boxShadow: "0 18px 48px var(--glow)",
         }}
       >
-        <div className="relative h-[58vw] min-h-[220px] max-h-[320px] overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `radial-gradient(ellipse 80% 70% at 50% 20%, var(--glow), transparent 64%), var(--background)`,
-            }}
-          />
+        <div
+          className="relative isolate h-[42vh] min-h-[240px] max-h-[340px] overflow-hidden"
+          style={{
+            background: `radial-gradient(ellipse at 50% 10%, var(--glow), transparent 55%), var(--background)`,
+          }}
+        >
           {character ? (
-            <Image
+            // Native img: next/image was omitted from the static HTML on mobile.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               src={character.src}
               alt={character.alt}
-              fill
-              priority
-              quality={78}
-              sizes="100vw"
-              className="object-cover"
-              style={{
-                objectPosition: character.thumbPosition ?? "center 18%",
-                opacity: isLight ? 0.88 : 1,
-              }}
+              className="absolute inset-0 h-full w-full object-cover object-top"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-end px-5 pb-6">
               <span
-                className="text-6xl font-semibold tracking-tight"
+                className="text-7xl font-semibold tracking-tight"
                 style={{ color: "var(--primary)" }}
               >
                 s
@@ -58,27 +45,27 @@ export default function MobileHero() {
             </div>
           )}
           <div
-            className="absolute inset-x-0 bottom-0 h-24"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-28"
             style={{
               background:
-                "linear-gradient(to top, color-mix(in srgb, var(--surface) 92%, var(--background)), transparent)",
+                "linear-gradient(to top, var(--background), transparent)",
             }}
           />
-          {character ? (
-            <span
-              className="absolute bottom-3 left-4 rounded-full border px-3 py-1 text-xs"
-              style={{
-                borderColor: "var(--border)",
-                background: "color-mix(in srgb, var(--background) 70%, transparent)",
-                color: "var(--foreground)",
-              }}
-            >
-              {theme.name}
-            </span>
-          ) : null}
+          <span
+            className="absolute bottom-3 left-4 z-10 rounded-full border px-3 py-1 text-xs"
+            style={{
+              borderColor: "var(--border)",
+              background: "color-mix(in srgb, var(--background) 78%, transparent)",
+            }}
+          >
+            {theme.name}
+          </span>
         </div>
 
-        <div className="px-5 pb-6 pt-4">
+        <div
+          className="relative z-10 px-5 pb-6 pt-5"
+          style={{ background: "var(--background)" }}
+        >
           <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-[var(--primary)]">
             Cybersecurity · CTF · Coding
           </p>
@@ -106,7 +93,6 @@ export default function MobileHero() {
               className="rounded-full border px-4 py-3 text-center text-sm font-medium"
               style={{
                 borderColor: "var(--border)",
-                background: "var(--surface)",
                 color: "var(--foreground)",
               }}
             >
@@ -114,7 +100,7 @@ export default function MobileHero() {
             </Link>
           </div>
         </div>
-      </motion.article>
+      </article>
     </section>
   );
 }
