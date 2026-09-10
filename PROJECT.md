@@ -233,7 +233,9 @@ tags: []
 
 也可以把 Markdown 文件直接拖到桌面快捷方式图标上。
 
-启动文件：`scripts/publish-note.cmd`
+启动文件：`scripts/publish-note.cmd`（必须是 ASCII + CRLF。UTF-8 中文或 Unix 换行会让 `cmd.exe` 解析失败并闪退。）
+
+如果窗口一闪就关：看 `%TEMP%\southsail-publish.log`。
 
 ### 命令行
 

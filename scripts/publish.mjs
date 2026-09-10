@@ -110,12 +110,22 @@ function quoteYaml(value) {
   return JSON.stringify(String(value));
 }
 
+function appendLog(message) {
+  try {
+    const logPath = path.join(os.tmpdir(), "southsail-publish.log");
+    fs.appendFileSync(logPath, `${new Date().toISOString()} ${message}\n`);
+  } catch {
+    // ignore
+  }
+}
+
 function runPicker(action) {
   const script = path.join(root, "scripts", "pick-note.ps1");
   const outFile = path.join(
     os.tmpdir(),
     `southsail-pick-${process.pid}-${Date.now()}-${action}.json`,
   );
+  appendLog(`picker start action=${action} out=${outFile}`);
   const result = spawnSync(
     "powershell.exe",
     [
@@ -146,13 +156,15 @@ function runPicker(action) {
   };
 
   if (result.status === 2) {
+    appendLog("picker cancelled");
     cleanup();
     return null;
   }
   if (result.status !== 0) {
     cleanup();
     const detail = (result.stderr || result.stdout || "").trim();
-    throw new Error(`文件选择窗口失败${detail ? `\n${detail}` : ""}`);
+    appendLog(`picker failed status=${result.status} ${detail}`);
+    throw new Error(`File picker failed${detail ? `\n${detail}` : ""}`);
   }
 
   try {
@@ -396,6 +408,7 @@ function publishGit(files, title, options) {
 }
 
 function main() {
+  appendLog(`publish.mjs argv=${JSON.stringify(process.argv.slice(2))} cwd=${process.cwd()}`);
   const options = parseArgs(process.argv.slice(2));
 
   if (options.pushContent) {
@@ -473,6 +486,8 @@ function main() {
 try {
   main();
 } catch (error) {
-  console.error(error instanceof Error ? error.message : error);
+  const message = error instanceof Error ? error.message : String(error);
+  appendLog(`error ${message}`);
+  console.error(message);
   process.exit(1);
 }

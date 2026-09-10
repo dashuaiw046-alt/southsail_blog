@@ -123,8 +123,17 @@ function Show-ModulePicker {
   Write-Result @{ type = $type }
 }
 
-if ($Action -eq "files") {
-  Show-FilePicker
-} else {
-  Show-ModulePicker
+try {
+  if ($Action -eq "files") {
+    Show-FilePicker
+  } else {
+    Show-ModulePicker
+  }
+} catch {
+  $message = $_.Exception.Message
+  if ($OutFile) {
+    Write-Result @{ error = $message }
+  }
+  [Console]::Error.WriteLine($message)
+  exit 1
 }

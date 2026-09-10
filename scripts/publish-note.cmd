@@ -1,31 +1,40 @@
 @echo off
 setlocal EnableExtensions
-chcp 65001 >nul
-cd /d "%~dp0\.."
-title southsail — 发布笔记
+set "SOUTHSAIL_LOG=%TEMP%\southsail-publish.log"
+>>"%SOUTHSAIL_LOG%" echo [%DATE% %TIME%] start
+>>"%SOUTHSAIL_LOG%" echo script=%~f0
+>>"%SOUTHSAIL_LOG%" echo args=%*
 
+cd /d "%~dp0.."
+if errorlevel 1 (
+  echo [ERROR] cannot enter project folder: "%~dp0.."
+  >>"%SOUTHSAIL_LOG%" echo cd failed
+  goto hold_fail
+)
+>>"%SOUTHSAIL_LOG%" echo project=%CD%
+
+title southsail publish note
 if not defined HOME set "HOME=%USERPROFILE%"
-set "PATH=%PATH%;D:\magic\node;D:\magic\git\Git\cmd"
+set "PATH=%PATH%;D:\magic\node;D:\magic\git\Git\cmd;C:\Windows\System32\WindowsPowerShell\v1.0"
 
 where node >nul 2>&1
 if errorlevel 1 (
-  echo [错误] 找不到 node.exe
-  echo 本机 Node 一般在 D:\magic\node
-  goto :fail
+  echo [ERROR] node.exe not found. Expected at D:\magic\node
+  >>"%SOUTHSAIL_LOG%" echo node missing
+  goto hold_fail
 )
-
 where git >nul 2>&1
 if errorlevel 1 (
-  echo [错误] 找不到 git.exe
-  echo 本机 Git 一般在 D:\magic\git\Git\cmd
-  goto :fail
+  echo [ERROR] git.exe not found. Expected at D:\magic\git\Git\cmd
+  >>"%SOUTHSAIL_LOG%" echo git missing
+  goto hold_fail
 )
 
 echo.
-echo southsail 发布笔记
-echo 1. 选择 Markdown 文件  （也可以把 .md 拖到桌面快捷方式上）
-echo 2. 选择 Articles 或 CTF
-echo 3. 自动提交并推送到 GitHub
+echo southsail publish note
+echo 1. Pick a Markdown file  (or drop .md onto the desktop shortcut)
+echo 2. Choose Articles or CTF
+echo 3. Commit and push to GitHub
 echo.
 
 set "ARGS="
@@ -37,22 +46,31 @@ goto collect
 
 :run
 if not "%ARGS%"=="" (
-  echo 已传入文件：
+  echo Files:
   echo %ARGS%
   echo.
 )
 
+>>"%SOUTHSAIL_LOG%" echo running node scripts\publish.mjs%ARGS%
 node "scripts\publish.mjs" %ARGS%
-set "EXITCODE=%ERRORLEVEL%"
+if errorlevel 1 goto hold_fail
 echo.
-if not "%EXITCODE%"=="0" goto :fail
-echo 完成。Netlify 会在几分钟内更新 https://southsail.netlify.app
+echo Done. Netlify will update https://southsail.netlify.app in a few minutes.
 echo.
-pause
-exit /b 0
+goto hold_ok
 
-:fail
-echo 发布失败。窗口会保持打开，方便查看上面的报错。
+:hold_fail
 echo.
-pause
-exit /b 1
+echo Publish failed. This window stays open so you can read the error.
+echo Log: %SOUTHSAIL_LOG%
+echo.
+if defined SOUTHSAIL_NOPAUSE exit /b 1
+echo Press any key to close...
+pause >nul
+exit
+
+:hold_ok
+if defined SOUTHSAIL_NOPAUSE exit /b 0
+echo Press any key to close...
+pause >nul
+exit
