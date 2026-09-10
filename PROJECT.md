@@ -226,10 +226,12 @@ tags: []
 
 双击后：
 
-1. 弹出文件选择框，选任意 `.md` / `.mdx`（可多选）
+1. 弹出文件选择框（会置顶，避免被黑窗口挡住），选任意 `.md` / `.mdx`（可多选）
 2. 再选模块：Articles 或 CTF
 3. 自动 commit + push
 4. 窗口留着看结果
+
+也可以把 Markdown 文件直接拖到桌面快捷方式图标上。
 
 启动文件：`scripts/publish-note.cmd`
 

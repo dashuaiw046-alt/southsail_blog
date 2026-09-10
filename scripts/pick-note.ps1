@@ -1,7 +1,9 @@
 param(
   [Parameter(Mandatory = $true)]
   [ValidateSet("files", "module")]
-  [string]$Action
+  [string]$Action,
+
+  [string]$OutFile
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,9 +11,37 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+function Write-Result($object) {
+  $json = $object | ConvertTo-Json -Compress -Depth 5
+  if ($OutFile) {
+    $parent = Split-Path -Parent $OutFile
+    if ($parent -and -not (Test-Path -LiteralPath $parent)) {
+      New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    }
+    $utf8 = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($OutFile, $json, $utf8)
+  } else {
+    Write-Output $json
+  }
+}
+
+function New-OwnerForm {
+  $owner = New-Object System.Windows.Forms.Form
+  $owner.Text = "southsail"
+  $owner.TopMost = $true
+  $owner.ShowInTaskbar = $false
+  $owner.FormBorderStyle = "FixedToolWindow"
+  $owner.StartPosition = "Manual"
+  $owner.Size = New-Object System.Drawing.Size(1, 1)
+  $owner.Location = New-Object System.Drawing.Point(-4000, -4000)
+  $owner.Show()
+  $owner.Activate()
+  return $owner
+}
+
 function Show-FilePicker {
   $dialog = New-Object System.Windows.Forms.OpenFileDialog
-  $dialog.Title = "Select Markdown notes"
+  $dialog.Title = "southsail — 选择 Markdown 笔记"
   $dialog.Filter = "Markdown (*.md;*.mdx)|*.md;*.mdx|All files (*.*)|*.*"
   $dialog.Multiselect = $true
   $dialog.CheckFileExists = $true
@@ -21,13 +51,19 @@ function Show-FilePicker {
     $dialog.InitialDirectory = $start
   }
 
-  $result = $dialog.ShowDialog()
+  $owner = New-OwnerForm
+  try {
+    $result = $dialog.ShowDialog($owner)
+  } finally {
+    $owner.Close()
+    $owner.Dispose()
+  }
+
   if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
     exit 2
   }
 
-  $payload = @{ files = @($dialog.FileNames) }
-  $payload | ConvertTo-Json -Compress
+  Write-Result @{ files = @($dialog.FileNames) }
 }
 
 function Show-ModulePicker {
@@ -39,6 +75,7 @@ function Show-ModulePicker {
   $form.MaximizeBox = $false
   $form.MinimizeBox = $false
   $form.TopMost = $true
+  $form.ShowInTaskbar = $true
 
   $label = New-Object System.Windows.Forms.Label
   $label.Text = "Choose a section for the selected files:"
@@ -70,13 +107,20 @@ function Show-ModulePicker {
   $form.CancelButton = $cancel
   $form.Controls.AddRange(@($label, $article, $ctf, $ok, $cancel)) | Out-Null
 
-  $result = $form.ShowDialog()
+  $owner = New-OwnerForm
+  try {
+    $form.Owner = $owner
+    $result = $form.ShowDialog($owner)
+  } finally {
+    $owner.Close()
+    $owner.Dispose()
+  }
   if ($result -ne [System.Windows.Forms.DialogResult]::OK) {
     exit 2
   }
 
   $type = if ($ctf.Checked) { "ctf" } else { "articles" }
-  @{ type = $type } | ConvertTo-Json -Compress
+  Write-Result @{ type = $type }
 }
 
 if ($Action -eq "files") {

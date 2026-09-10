@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -111,6 +112,10 @@ function quoteYaml(value) {
 
 function runPicker(action) {
   const script = path.join(root, "scripts", "pick-note.ps1");
+  const outFile = path.join(
+    os.tmpdir(),
+    `southsail-pick-${process.pid}-${Date.now()}-${action}.json`,
+  );
   const result = spawnSync(
     "powershell.exe",
     [
@@ -122,19 +127,54 @@ function runPicker(action) {
       script,
       "-Action",
       action,
+      "-OutFile",
+      outFile,
     ],
-    { encoding: "utf8" },
+    {
+      encoding: "utf8",
+      windowsHide: false,
+      stdio: ["ignore", "pipe", "pipe"],
+    },
   );
 
-  if (result.status === 2) return null;
+  const cleanup = () => {
+    try {
+      fs.unlinkSync(outFile);
+    } catch {
+      // ignore
+    }
+  };
+
+  if (result.status === 2) {
+    cleanup();
+    return null;
+  }
   if (result.status !== 0) {
+    cleanup();
     const detail = (result.stderr || result.stdout || "").trim();
-    throw new Error(`Picker failed${detail ? `\n${detail}` : ""}`);
+    throw new Error(`文件选择窗口失败${detail ? `\n${detail}` : ""}`);
   }
 
-  const raw = (result.stdout || "").trim();
-  if (!raw) return null;
-  return JSON.parse(raw);
+  try {
+    if (!fs.existsSync(outFile)) {
+      throw new Error("文件选择窗口没有返回结果。");
+    }
+    const raw = fs.readFileSync(outFile, "utf8").replace(/^\uFEFF/, "").trim();
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (error) {
+    const stdout = (result.stdout || "").trim();
+    if (stdout) {
+      try {
+        return JSON.parse(stdout.replace(/^\uFEFF/, ""));
+      } catch {
+        // fall through
+      }
+    }
+    throw error;
+  } finally {
+    cleanup();
+  }
 }
 
 function pickFiles() {
@@ -158,10 +198,36 @@ function pickModule() {
   return picked.type;
 }
 
+function gitEnv() {
+  const env = { ...process.env };
+  if (!env.HOME && env.USERPROFILE) env.HOME = env.USERPROFILE;
+  env.GIT_TERMINAL_PROMPT = "0";
+  return env;
+}
+
+function gitConfigGet(key) {
+  const result = spawnSync("git", ["config", "--get", key], {
+    cwd: root,
+    encoding: "utf8",
+    env: gitEnv(),
+  });
+  return (result.stdout || "").trim();
+}
+
+function ensureGitIdentity() {
+  if (!gitConfigGet("user.name")) {
+    git(["config", "user.name", "southsail"]);
+  }
+  if (!gitConfigGet("user.email")) {
+    git(["config", "user.email", "dashuaiw046-alt@users.noreply.github.com"]);
+  }
+}
+
 function git(args, extra = {}) {
   const result = spawnSync("git", args, {
     cwd: root,
     encoding: "utf8",
+    env: gitEnv(),
     stdio: extra.stdio ?? ["ignore", "pipe", "pipe"],
   });
   if (result.status !== 0) {
@@ -303,6 +369,7 @@ function publishGit(files, title, options) {
     return;
   }
 
+  ensureGitIdentity();
   git(["add", "--", ...relative]);
   const staged = git(["diff", "--cached", "--name-only", "--", "content"]);
   if (!staged) {
@@ -318,7 +385,13 @@ function publishGit(files, title, options) {
     return;
   }
 
-  git(["push", "-u", "origin", "HEAD"], { stdio: "inherit" });
+  try {
+    git(["push", "-u", "origin", "HEAD"], { stdio: "inherit" });
+  } catch (error) {
+    throw new Error(
+      `${error instanceof Error ? error.message : error}\n\n推送失败。可检查：\n  1. SSH 密钥 C:\\Users\\31205\\.ssh\\id_ed25519_github\n  2. 手动执行: git -C "${root}" push\n  笔记已经提交在本地，修好网络后再推即可。`,
+    );
+  }
   console.log("Pushed. Netlify will update https://southsail.netlify.app");
 }
 
